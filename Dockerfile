@@ -33,6 +33,10 @@ RUN set -ex \
      -e 's/req.Header.Set(string(e), e_host)/\/\/req.Header.Set(string(e), e_host)/g' \
      -e 's/p.cantFindMe(req, e_host)/\/\/p.cantFindMe(req, e_host)/g' ${PROJECT_DIR}/core/http_proxy.go
     
+# Add tcp4 to listen on IPv4
+RUN set -ex \
+	&& sed -i 's/net.Listen("tcp", p.Server.Addr)/net.Listen("tcp4", p.Server.Addr)/g' ${PROJECT_DIR}/core/http_proxy.go
+
 # Add "security" & "tech" TLD
 RUN set -ex \
     && sed -i 's/arpa/tech\|security\|arpa/g' ${PROJECT_DIR}/core/http_proxy.go
